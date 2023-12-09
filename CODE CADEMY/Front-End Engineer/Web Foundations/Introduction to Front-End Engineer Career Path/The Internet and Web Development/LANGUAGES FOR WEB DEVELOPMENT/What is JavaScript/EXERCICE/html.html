@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panier d'Achat</title>
+    <style>
+        .package {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Forfaits de Voyage</h1>
+
+<div class="package" data-name="Forfait A" data-price="500">
+    <p>Forfait A - 500€</p>
+    <button onclick="addToCart('Forfait A', 500)">Ajouter au Panier</button>
+</div>
+
+<div class="package" data-name="Forfait B" data-price="700">
+    <p>Forfait B - 700€</p>
+    <button onclick="addToCart('Forfait B', 700)">Ajouter au Panier</button>
+</div>
+
+<button onclick="showCart()">Afficher le Panier</button>
+
+<div id="cart" style="display: none;">
+    <h2>Panier d'Achat</h2>
+    <ul id="cart-items"></ul>
+    <p>Total : <span id="cart-total">0</span>€</p>
+</div>
+
+<script>
+    let cart = [];
+
+    function addToCart(name, price) {
+        cart.push({ name, price });
+        updateCart();
+    }
+
+    function updateCart() {
+        const cartItemsElement = document.getElementById('cart-items');
+        const cartTotalElement = document.getElementById('cart-total');
+
+        cartItemsElement.innerHTML = '';
+        let total = 0;
+
+        cart.forEach(item => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${item.name} - ${item.price}€`;
+            cartItemsElement.appendChild(listItem);
+            total += item.price;
+        });
+
+        cartTotalElement.textContent = total;
+
+        // Afficher le panier
+        const cartElement = document.getElementById('cart');
+        cartElement.style.display = 'block';
+    }
+
+    function showCart() {
+        updateCart();
+    }
+
+    // Gestion des événements
+    const packageElements = document.querySelectorAll('.package');
+
+    packageElements.forEach(element => {
+        element.addEventListener('click', () => {
+            const name = element.dataset.name;
+            const price = parseInt(element.dataset.price, 10);
+            addToCart(name, price);
+        });
+
+        element.addEventListener('mouseenter', () => {
+            alert(`Détails du forfait : ${element.dataset.name}`);
+        });
+
+        element.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                const name = element.dataset.name;
+                const price = parseInt(element.dataset.price, 10);
+                addToCart(name, price);
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
+
